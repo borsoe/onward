@@ -13,8 +13,9 @@ namespace Onward.Interactions.Classes
         private Vector3 _initialPos;
 
         [Inject]
-        public void Construct(Tilemap allowedTiles)
+        public void Construct([Inject(Id = "ally")]Tilemap allowedTiles)
         {
+            Debug.Log("bitch");
             _allowedTiles = allowedTiles;
         }
         
@@ -33,7 +34,7 @@ namespace Onward.Interactions.Classes
         public void OnDragEnd(Vector3 pos)
         {
             var cellPos = _allowedTiles.WorldToCell(pos);
-            transform.position = _allowedTiles.GetCellCenterWorld(cellPos);
+            transform.position = _allowedTiles.HasTile(cellPos) ? _allowedTiles.GetCellCenterWorld(cellPos) : _initialPos;
         }
     }
 }
