@@ -11,7 +11,7 @@
                     "id": "3841e8a1-fe0d-439c-b701-e2813d181861",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Tap"
+                    "interactions": "Tap,Press(behavior=2)"
                 },
                 {
                     "name": "Position",

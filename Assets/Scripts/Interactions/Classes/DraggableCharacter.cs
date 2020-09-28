@@ -1,4 +1,6 @@
-﻿using Onward.Interactions.Interfaces;
+﻿using Onward.Character.MonoBehaviours;
+using Onward.Grid.MonoBehaviours;
+using Onward.Interactions.Interfaces;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Zenject;
@@ -7,16 +9,18 @@ namespace Onward.Interactions.Classes
 {
     public class DraggableCharacter : MonoBehaviour, IDraggable
     {
-
         private Tilemap _allowedTiles;
-
         private Vector3 _initialPos;
-
+        private GraphData _graphData;
+        private CharacterEntity _characterEntity;
+        
         [Inject]
-        public void Construct([Inject(Id = "ally")]Tilemap allowedTiles)
+        public void Construct([Inject(Id = "ally")]Tilemap allowedTiles, GraphData graphData,
+            CharacterEntity characterEntity)
         {
-            Debug.Log("bitch");
             _allowedTiles = allowedTiles;
+            _graphData = graphData;
+            _characterEntity = characterEntity;
         }
         
         public void OnDragBegin(Vector3 pos)
@@ -34,7 +38,22 @@ namespace Onward.Interactions.Classes
         public void OnDragEnd(Vector3 pos)
         {
             var cellPos = _allowedTiles.WorldToCell(pos);
-            transform.position = _allowedTiles.HasTile(cellPos) ? _allowedTiles.GetCellCenterWorld(cellPos) : _initialPos;
+            var targetPos =
+                _allowedTiles.HasTile(cellPos) ? _allowedTiles.GetCellCenterWorld(cellPos) : _initialPos;
+            if (_graphData[targetPos].OccupyingCharacterEntity == null)
+            {
+                _graphData[targetPos].OccupyingCharacterEntity = _characterEntity;
+                _graphData[_initialPos].OccupyingCharacterEntity = null;
+                // transform.position = targetPos;
+            }else if (_graphData[targetPos].OccupyingCharacterEntity == _characterEntity)
+                transform.position = _initialPos;
+            else
+            {
+                //TODO swap
+                var tempEntity = _graphData[targetPos].OccupyingCharacterEntity;
+                _graphData[targetPos].OccupyingCharacterEntity = _graphData[_initialPos].OccupyingCharacterEntity;
+                _graphData[_initialPos].OccupyingCharacterEntity = tempEntity;
+            }
         }
     }
 }

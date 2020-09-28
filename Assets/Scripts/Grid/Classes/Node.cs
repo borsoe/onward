@@ -1,5 +1,7 @@
 ﻿
 
+using System.Collections.Generic;
+using Onward.Character.MonoBehaviours;
 using UnityEngine;
 
 namespace Onward.Grid.Classes
@@ -9,7 +11,25 @@ namespace Onward.Grid.Classes
     /// </summary>
     public class Node
     {
-        public Character.MonoBehaviours.Character OccupyingCharacter;
+        private CharacterEntity _occupyingCharacterEntity;
+        
+        
         public Vector3 Location;
+        public Vector3Int LocationInGrid;
+        public List<Node> AdjacentNodes;
+        public bool IsNodeAlly;
+
+        public CharacterEntity OccupyingCharacterEntity
+        {
+            get => _occupyingCharacterEntity;
+            set
+            {
+                _occupyingCharacterEntity = value;
+                if (_occupyingCharacterEntity != null)
+                {
+                    _occupyingCharacterEntity.GoToLocation(Location);
+                }
+            }
+        }
     }
 }
