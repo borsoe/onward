@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Onward.Character.MonoBehaviours;
 using UnityEngine;
+using Zenject.ReflectionBaking.Mono.Cecil.Cil;
 
 namespace Onward.Grid.Classes
 {
@@ -11,7 +12,7 @@ namespace Onward.Grid.Classes
     /// </summary>
     public class Node
     {
-        private CharacterEntity _occupyingCharacterEntity;
+        private Entity _occupyingEntity;
         
         
         public Vector3 Location;
@@ -19,15 +20,25 @@ namespace Onward.Grid.Classes
         public List<Node> AdjacentNodes;
         public bool IsNodeAlly;
 
-        public CharacterEntity OccupyingCharacterEntity
+        /// <summary>
+        /// to be used by the BFS algorithm
+        /// </summary>
+        public Node PrevNode;
+
+        /// <summary>
+        /// to be selected by the BFS algorithm
+        /// </summary>
+        public Node NexNode;
+        
+        public Entity OccupyingEntity
         {
-            get => _occupyingCharacterEntity;
+            get => _occupyingEntity;
             set
             {
-                _occupyingCharacterEntity = value;
-                if (_occupyingCharacterEntity != null)
+                _occupyingEntity = value;
+                if (_occupyingEntity != null)
                 {
-                    _occupyingCharacterEntity.GoToLocation(Location);
+                    _occupyingEntity.GoToLocation(Location);
                 }
             }
         }

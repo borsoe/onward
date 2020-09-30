@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Onward.AI.Interfaces;
+using Onward.Character.Interfaces;
 using Onward.Character.MonoBehaviours;
 using Onward.Grid.Classes;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 using Zenject;
 
 namespace Onward.Grid.MonoBehaviours
@@ -18,7 +18,7 @@ namespace Onward.Grid.MonoBehaviours
         private Dictionary<Vector3, Node> _nodes;
         private Tilemap _enemyGround;
         private Tilemap _allyGround;
-        private List<CharacterEntity> _initialCharacters;
+        private List<Entity> _initialCharacters;
         private UnityEngine.Grid _grid;
         
         public Node this[Vector3 pos]
@@ -38,7 +38,7 @@ namespace Onward.Grid.MonoBehaviours
         
         [Inject]
         public void Construct([Inject(Id = "enemy")] Tilemap enemyGrounds, [Inject(Id = "ally")] Tilemap allyGrounds, 
-            List<CharacterEntity> initialCharacters, UnityEngine.Grid grid)
+            List<Entity> initialCharacters, UnityEngine.Grid grid)
         {
             _enemyGround = enemyGrounds;
             _allyGround = allyGrounds;
@@ -73,7 +73,7 @@ namespace Onward.Grid.MonoBehaviours
                 {
                     Location = cellCenterWorldLocation,
                     LocationInGrid = pos,
-                    OccupyingCharacterEntity = null,
+                    OccupyingEntity = null,
                     IsNodeAlly = isAlly,
                     AdjacentNodes = new List<Node>()
                 };
@@ -88,7 +88,7 @@ namespace Onward.Grid.MonoBehaviours
                 var position = transform1.position;
                 position = this[position].Location;
                 transform1.position = position;
-                this[position].OccupyingCharacterEntity = character;
+                this[position].OccupyingEntity = character;
             }
         }
 
@@ -122,6 +122,108 @@ namespace Onward.Grid.MonoBehaviours
                 new Vector3(node.Location.x + cellSize.x / 2, node.Location.y - cellSize.y, 0f)
             };
             return values;
+        }
+
+        public int Distance(Vector3 to, Vector3 from)
+        {
+            float xDistance = Mathf.Abs(to.x - from.x) / _grid.cellSize.x;
+            float yDistance = Mathf.Abs(to.y - from.y) / _grid.cellSize.y;
+            return Mathf.RoundToInt(xDistance + yDistance);
+        }
+
+        public bool BFS(Vector3 origin, int range, out IAttackAble target, out Node vertex)
+        {
+            var visitedNodes = new HashSet<Node>();
+            var toBeVisited = new HashSet<Node>();
+            var queue = new Queue<Node>();
+            var originalEntity = this[origin].OccupyingEntity;
+            queue.Enqueue(this[origin]);
+            target = null;
+            vertex = null;
+
+            while (queue.Count > 0)
+            {
+                //move check
+                vertex = queue.Dequeue();
+                
+                //check if I can attack from here
+                if (_RangeBfs(range, ref target, vertex, visitedNodes, originalEntity, queue))
+                {
+                    _BuildPath(origin, vertex);
+                    return true;
+                }
+                
+                if (!visitedNodes.Add(vertex))
+                    continue;
+
+                for (int i = 0; i < vertex.AdjacentNodes.Count; i++)
+                {
+                    var neighbour = vertex.AdjacentNodes[i];
+                    if (visitedNodes.Contains(neighbour) ||
+                        !((IAttackAble) neighbour.OccupyingEntity).CanBeAttackedBy(originalEntity)) continue;
+                    if (toBeVisited.Add(neighbour))
+                    {
+                        queue.Enqueue(neighbour);
+                        neighbour.PrevNode = vertex;
+                    }
+                    
+                }
+            }
+            return false;
+        }
+
+        private void _BuildPath(Vector3 origin, Node vertex)
+        {
+            var tmp = vertex;
+            while (tmp != this[origin])
+            {
+                tmp.PrevNode.NexNode = tmp.PrevNode;
+                tmp = tmp.PrevNode;
+            }
+        }
+
+        private static bool _RangeBfs(int range, ref IAttackAble target, Node vertex, HashSet<Node> visitedNodes,
+            Entity originalEntity, Queue<Node> queue)
+        {
+            var rangeQueue = new Queue<Node>();
+            var rangeVisited = new HashSet<Node>();
+            var toBeRangeVisited = new HashSet<Node>();
+
+            rangeQueue.Enqueue(vertex);
+            int depth = 0;
+            int stepsToIncreaseDepth = 1;
+            while (rangeQueue.Count > 0)
+            {
+                var v = rangeQueue.Dequeue();
+                stepsToIncreaseDepth--;
+                if (!rangeVisited.Add(v) || visitedNodes.Contains(v))
+                    continue;
+                target = vertex.OccupyingEntity as IAttackAble;
+                if (target != null && target.CanBeAttackedBy(originalEntity))
+                    return true;
+                for (int i = 0; i < v.AdjacentNodes.Count; i++)
+                {
+                    var n = v.AdjacentNodes[i];
+                    if (visitedNodes.Contains(n) || rangeVisited.Contains(n)) continue;
+                    if (toBeRangeVisited.Add(n))
+                    {
+                        rangeQueue.Enqueue(n);
+                    }
+                }
+
+                if (stepsToIncreaseDepth == 0)
+                {
+                    depth++;
+                    stepsToIncreaseDepth = queue.Count;
+                }
+
+                if (depth >= range)
+                {
+                    break;
+                }
+            }
+
+            return false;
         }
     }
 }

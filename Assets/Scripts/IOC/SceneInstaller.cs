@@ -17,7 +17,7 @@ namespace Onward.IOC
         {
             Container.Bind<Tilemap>().WithId("ally").FromInstance(allyTileMap).AsCached();
             Container.Bind<Tilemap>().WithId("enemy").FromInstance(enemyTileMap).AsCached();
-            Container.Bind<CharacterEntity>().FromComponentsInHierarchy().AsTransient();
+            Container.Bind<Entity>().FromComponentsInHierarchy().AsTransient();
             Container.Bind<GraphData>().FromInstance(graphData).AsSingle();
             Container.Bind<UnityEngine.Grid>().FromInstance(grid).AsSingle();
         }

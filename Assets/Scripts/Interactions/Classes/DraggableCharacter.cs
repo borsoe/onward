@@ -12,15 +12,15 @@ namespace Onward.Interactions.Classes
         private Tilemap _allowedTiles;
         private Vector3 _initialPos;
         private GraphData _graphData;
-        private CharacterEntity _characterEntity;
+        private Entity _entity;
         
         [Inject]
         public void Construct([Inject(Id = "ally")]Tilemap allowedTiles, GraphData graphData,
-            CharacterEntity characterEntity)
+            Entity entity)
         {
             _allowedTiles = allowedTiles;
             _graphData = graphData;
-            _characterEntity = characterEntity;
+            _entity = entity;
         }
         
         public void OnDragBegin(Vector3 pos)
@@ -40,19 +40,19 @@ namespace Onward.Interactions.Classes
             var cellPos = _allowedTiles.WorldToCell(pos);
             var targetPos =
                 _allowedTiles.HasTile(cellPos) ? _allowedTiles.GetCellCenterWorld(cellPos) : _initialPos;
-            if (_graphData[targetPos].OccupyingCharacterEntity == null)
+            if (_graphData[targetPos].OccupyingEntity == null)
             {
-                _graphData[targetPos].OccupyingCharacterEntity = _characterEntity;
-                _graphData[_initialPos].OccupyingCharacterEntity = null;
+                _graphData[targetPos].OccupyingEntity = _entity;
+                _graphData[_initialPos].OccupyingEntity = null;
                 // transform.position = targetPos;
-            }else if (_graphData[targetPos].OccupyingCharacterEntity == _characterEntity)
+            }else if (_graphData[targetPos].OccupyingEntity == _entity)
                 transform.position = _initialPos;
             else
             {
                 //TODO swap
-                var tempEntity = _graphData[targetPos].OccupyingCharacterEntity;
-                _graphData[targetPos].OccupyingCharacterEntity = _graphData[_initialPos].OccupyingCharacterEntity;
-                _graphData[_initialPos].OccupyingCharacterEntity = tempEntity;
+                var tempEntity = _graphData[targetPos].OccupyingEntity;
+                _graphData[targetPos].OccupyingEntity = _graphData[_initialPos].OccupyingEntity;
+                _graphData[_initialPos].OccupyingEntity = tempEntity;
             }
         }
     }

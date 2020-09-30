@@ -9,7 +9,7 @@ namespace Onward.IOC
     {
         public override void InstallBindings()
         {
-            Container.Bind<CharacterEntity>().FromComponentOnRoot().AsSingle();
+            Container.Bind<Entity>().FromComponentOnRoot().AsSingle();
         }
     }
 }
