@@ -131,7 +131,7 @@ namespace Onward.Grid.MonoBehaviours
             return Mathf.RoundToInt(xDistance + yDistance);
         }
 
-        public bool BFS(Vector3 origin, int range, out IAttackAble target, out Node vertex)
+        public bool BFS(Vector3 origin, int range, out IAttackAble target)
         {
             var visitedNodes = new HashSet<Node>();
             var toBeVisited = new HashSet<Node>();
@@ -139,7 +139,7 @@ namespace Onward.Grid.MonoBehaviours
             var originalEntity = this[origin].OccupyingEntity;
             queue.Enqueue(this[origin]);
             target = null;
-            vertex = null;
+            Node vertex = null;
             while (queue.Count > 0)
             {
                 vertex = queue.Dequeue();

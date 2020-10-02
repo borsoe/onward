@@ -20,7 +20,6 @@ namespace Onward.Character.Classes
         #region Setup
 
         private IAttackAble _target;
-        private Node _destination;
         private GraphData _graphData;
         private GameManager _gameManager;
         private AiManager _aiManager;
@@ -89,7 +88,7 @@ namespace Onward.Character.Classes
 
         public bool FindPathToNearestTarget()
         {
-            return _graphData.BFS(transform.position, championData.attackRange, out _target, out _destination);
+            return _graphData.BFS(transform.position, championData.attackRange, out _target);
         }
         
         public void MoveToward()
