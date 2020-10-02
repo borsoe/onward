@@ -10,6 +10,29 @@ namespace Onward.Character.ScriptableObjects
         public float baseAttackDamage;
         public float attackDamage;
         public float baseHealth;
-        public float health;
+        private float _health;
+
+        public delegate void HealthChangeDelegate(float value);
+        public HealthChangeDelegate onHealthChange;
+        public float Health
+        {
+            get => _health;
+            set
+            {
+                _health = value;
+                //TODO delegate
+                onHealthChange(_health);
+            }
+        }
+        /// <summary>
+        /// How many nodes can this character travers in a second, times 100?
+        /// </summary>
+        public float baseMoveSpeed; 
+        public float moveSpeed;
+        /// <summary>
+        /// How many attacks can this character do per seconds?
+        /// </summary>
+        public float baseAttackSpeed;
+        public float attackSpeed;
     }
 }

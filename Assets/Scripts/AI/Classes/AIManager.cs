@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Onward.AI.Interfaces;
 using Onward.Character.MonoBehaviours;
+using Onward.Game.MonoBehaviours;
 using UnityEngine;
 using Zenject;
 
@@ -15,33 +16,53 @@ namespace Onward.AI.Classes
 
         private List<IAiListener> _nextListeners;
 
-        public List<IAiListener> Listeners
+        private GameManager _gameManager;
+        
+        // public IAiListener NewListener
+        // {
+        //     set => _nextListeners.Add(value);
+        // }
+
+        public void SetNewListener(IAiListener listener)
         {
-            set => _nextListeners = value;
+            _nextListeners.Add(listener);
         }
 
         [Inject]
-        public AiManager(List<IAiListener> currentListeners)
+        public AiManager(List<IAiListener> currentListeners, GameManager gameManager)
         {
-            _nextListeners = currentListeners;
-            _currentListeners = new List<IAiListener>();
+            _currentListeners = currentListeners;
+            _gameManager = gameManager;
+            _nextListeners = new List<IAiListener>();
+            
         }
 
         public void Tick()
         {
+            // Debug.Log($"current listeners is: {_currentListeners.Count} and next is: {_nextListeners.Count}");
+            if (!_gameManager.isStateCombat) return;
+            // get all the listeners that are scheduled 
+            if (_nextListeners.Count != 0)
+            {
+                _currentListeners.AddRange(_nextListeners);
+                _nextListeners.Clear();
+            }
             for (int i = 0; i < _currentListeners.Count; i++)
             {
-                if (_nextListeners != null) _currentListeners.AddRange(_nextListeners);
-                _nextListeners = null;
                 var listener = _currentListeners[i];
+                // if there is an available target, attack it!
                 if (listener.CheckTarget())
                 {
                     listener.Attack();
                     _currentListeners.Remove(listener);
                     i--;
-                }else if (listener.FindPathToNearestTarget())
+                }else if (listener.FindPathToNearestTarget()) // search for new target
                 {
-                    listener.MoveToward();
+                    // if the new target is in range, attack it
+                    if (listener.CheckTarget())
+                        listener.Attack();
+                    else // if not, move toward it
+                        listener.MoveToward();
                     _currentListeners.Remove(listener);
                     i--;
                 }

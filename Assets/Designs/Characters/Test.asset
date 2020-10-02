@@ -12,4 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd885335cc284f4b86edc13af95bb0fa, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  name: mamad
+  baseAttackRange: 1
+  attackRange: 1
+  baseAttackDamage: 10
+  attackDamage: 10
+  baseHealth: 200
+  baseMoveSpeed: 150
+  moveSpeed: 150
+  baseAttackSpeed: 1
+  attackSpeed: 1

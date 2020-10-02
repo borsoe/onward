@@ -140,50 +140,62 @@ namespace Onward.Grid.MonoBehaviours
             queue.Enqueue(this[origin]);
             target = null;
             vertex = null;
-
             while (queue.Count > 0)
             {
-                //move check
                 vertex = queue.Dequeue();
                 
                 //check if I can attack from here
-                if (_RangeBfs(range, ref target, vertex, visitedNodes, originalEntity, queue))
+                if (_RangeBfs(range, ref target, vertex, visitedNodes, originalEntity))
                 {
                     _BuildPath(origin, vertex);
                     return true;
                 }
-                
                 if (!visitedNodes.Add(vertex))
                     continue;
 
                 for (int i = 0; i < vertex.AdjacentNodes.Count; i++)
                 {
                     var neighbour = vertex.AdjacentNodes[i];
-                    if (visitedNodes.Contains(neighbour) ||
-                        !((IAttackAble) neighbour.OccupyingEntity).CanBeAttackedBy(originalEntity)) continue;
-                    if (toBeVisited.Add(neighbour))
-                    {
-                        queue.Enqueue(neighbour);
-                        neighbour.PrevNode = vertex;
-                    }
                     
+                    if (neighbour.OccupyingEntity != null && neighbour.OccupyingEntity.faction != originalEntity.faction)
+                    {
+                        target = (IAttackAble) neighbour.OccupyingEntity;
+                        _BuildPath(origin, vertex);
+                        return true;
+                    }    
+                    if (visitedNodes.Contains(neighbour) ||
+                        _IsAlly(neighbour, originalEntity)) continue;
+                    if (!toBeVisited.Add(neighbour)) continue;
+                    queue.Enqueue(neighbour);
+                    neighbour.PrevNode = vertex;
                 }
             }
             return false;
         }
 
+        private static bool _IsAlly(Node neighbour, Entity originalEntity)
+        {
+            return neighbour.OccupyingEntity != null && neighbour.OccupyingEntity.faction == originalEntity.faction;
+        }
+
         private void _BuildPath(Vector3 origin, Node vertex)
         {
             var tmp = vertex;
-            while (tmp != this[origin])
+            var last = this[origin];
+            if (tmp == last)
             {
-                tmp.PrevNode.NexNode = tmp.PrevNode;
+                tmp.NextNode = tmp;
+                return;
+            }
+            while (tmp != last)
+            {
+                tmp.PrevNode.NextNode = tmp;
                 tmp = tmp.PrevNode;
             }
         }
 
         private static bool _RangeBfs(int range, ref IAttackAble target, Node vertex, HashSet<Node> visitedNodes,
-            Entity originalEntity, Queue<Node> queue)
+            Entity originalEntity)
         {
             var rangeQueue = new Queue<Node>();
             var rangeVisited = new HashSet<Node>();
@@ -198,7 +210,7 @@ namespace Onward.Grid.MonoBehaviours
                 stepsToIncreaseDepth--;
                 if (!rangeVisited.Add(v) || visitedNodes.Contains(v))
                     continue;
-                target = vertex.OccupyingEntity as IAttackAble;
+                target = v.OccupyingEntity as IAttackAble;
                 if (target != null && target.CanBeAttackedBy(originalEntity))
                     return true;
                 for (int i = 0; i < v.AdjacentNodes.Count; i++)
@@ -214,15 +226,12 @@ namespace Onward.Grid.MonoBehaviours
                 if (stepsToIncreaseDepth == 0)
                 {
                     depth++;
-                    stepsToIncreaseDepth = queue.Count;
+                    stepsToIncreaseDepth = rangeQueue.Count;
                 }
 
-                if (depth >= range)
-                {
-                    break;
-                }
+                if (depth > range)
+                    return false;
             }
-
             return false;
         }
     }

@@ -28,8 +28,8 @@ namespace Onward.Grid.Classes
         /// <summary>
         /// to be selected by the BFS algorithm
         /// </summary>
-        public Node NexNode;
-        
+        public Node NextNode;
+
         public Entity OccupyingEntity
         {
             get => _occupyingEntity;

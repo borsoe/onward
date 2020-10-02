@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Onward.Interactions.Classes
+namespace Onward.Interactions.MonoBehaviours
 {
     public class PlayerControlManager : MonoBehaviour
     {
