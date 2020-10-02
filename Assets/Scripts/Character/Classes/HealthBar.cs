@@ -19,7 +19,7 @@ namespace Onward.Character.Classes
         public void UpdateHealth(float value)
         {
             var scale = _bar.localScale;
-            scale.x = 1 / value;
+            scale.x = value;
             _bar.localScale = scale;
             _barSprite.color = _gradient.Evaluate(scale.x);
         }

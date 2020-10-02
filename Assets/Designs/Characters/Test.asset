@@ -17,7 +17,8 @@ MonoBehaviour:
   baseAttackDamage: 10
   attackDamage: 10
   baseHealth: 200
+  maxHealth: 200
   baseMoveSpeed: 150
   moveSpeed: 150
-  baseAttackSpeed: 1
-  attackSpeed: 1
+  baseAttackSpeed: 0.6
+  attackSpeed: 0.6

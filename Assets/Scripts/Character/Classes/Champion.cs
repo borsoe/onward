@@ -25,7 +25,21 @@ namespace Onward.Character.Classes
         private GameManager _gameManager;
         private AiManager _aiManager;
         private HealthBar _healthBar;
-        
+
+        public delegate void HealthChangeDelegate(float value);
+        public HealthChangeDelegate onHealthChange;
+        private float _health;
+
+        public float Health
+        {
+            get => _health;
+            set
+            {
+                onHealthChange(_health / championData.maxHealth);
+                _health = value;
+            }
+        }
+
         public ChampionData championData;
         [SerializeField] private float distanceOffset;
 
@@ -36,7 +50,9 @@ namespace Onward.Character.Classes
             _gameManager = gameManager;
             _aiManager = aiManager;
             _healthBar = healthBar;
-            championData.onHealthChange = _healthBar.UpdateHealth;
+            //TODO generalize
+            _health = championData.baseHealth;
+            onHealthChange = _healthBar.UpdateHealth;
         }
 
         #endregion
@@ -97,7 +113,7 @@ namespace Onward.Character.Classes
         public void TakeDamage(Damage damage)
         {
             //TODO sadta chiz!!!
-            championData.Health -= damage.Value;
+            Health -= damage.Value;
         }
 
         public void RangeAttack()
@@ -132,6 +148,7 @@ namespace Onward.Character.Classes
 
         private IEnumerator AttackAction()
         {
+            // Debug.Log($"character {name} is attacking {((MonoBehaviour)_target).name}");
             float waitTime = 1f / championData.attackSpeed;
             yield return new WaitForSeconds(waitTime);
             

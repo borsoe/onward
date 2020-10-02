@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Onward.Character.Classes;
+using UnityEngine;
 
 namespace Onward.Character.ScriptableObjects
 {
@@ -10,20 +11,8 @@ namespace Onward.Character.ScriptableObjects
         public float baseAttackDamage;
         public float attackDamage;
         public float baseHealth;
-        private float _health;
-
-        public delegate void HealthChangeDelegate(float value);
-        public HealthChangeDelegate onHealthChange;
-        public float Health
-        {
-            get => _health;
-            set
-            {
-                _health = value;
-                //TODO delegate
-                onHealthChange(_health);
-            }
-        }
+        public float maxHealth;
+        
         /// <summary>
         /// How many nodes can this character travers in a second, times 100?
         /// </summary>
