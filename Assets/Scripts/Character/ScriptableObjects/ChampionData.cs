@@ -6,6 +6,7 @@ namespace Onward.Character.ScriptableObjects
     [CreateAssetMenu(fileName = "Character Data", menuName = "Onward/Data/CharacterData", order = 0)]
     public class ChampionData : ScriptableObject
     {
+        [Header("base attributes")]
         public int baseAttackRange;
         public int attackRange;
         public float baseAttackDamage;
@@ -23,5 +24,10 @@ namespace Onward.Character.ScriptableObjects
         /// </summary>
         public float baseAttackSpeed;
         public float attackSpeed;
+
+        [Header("range attack")] 
+        public Sprite attackProjectileSprite;
+
+        public float rangeAttackTravelSpeed;
     }
 }

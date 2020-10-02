@@ -126,9 +126,9 @@ namespace Onward.Grid.MonoBehaviours
 
         public int Distance(Vector3 to, Vector3 from)
         {
-            float xDistance = Mathf.Abs(to.x - from.x) / _grid.cellSize.x;
-            float yDistance = Mathf.Abs(to.y - from.y) / _grid.cellSize.y;
-            return Mathf.RoundToInt(xDistance + yDistance);
+            var t = _grid.WorldToCell(to);
+            var f = _grid.WorldToCell(from);
+            return Mathf.Max(Mathf.Abs(t.x - f.x), Mathf.Abs(t.y - f.y), Mathf.Abs(t.y - f.y));
         }
 
         public bool BFS(Vector3 origin, int range, out IAttackAble target)
@@ -200,7 +200,6 @@ namespace Onward.Grid.MonoBehaviours
             var rangeQueue = new Queue<Node>();
             var rangeVisited = new HashSet<Node>();
             var toBeRangeVisited = new HashSet<Node>();
-
             rangeQueue.Enqueue(vertex);
             int depth = 0;
             int stepsToIncreaseDepth = 1;
@@ -222,13 +221,11 @@ namespace Onward.Grid.MonoBehaviours
                         rangeQueue.Enqueue(n);
                     }
                 }
-
                 if (stepsToIncreaseDepth == 0)
                 {
                     depth++;
                     stepsToIncreaseDepth = rangeQueue.Count;
                 }
-
                 if (depth > range)
                     return false;
             }

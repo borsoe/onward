@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd885335cc284f4b86edc13af95bb0fa, type: 3}
-  m_Name: Test
+  m_Name: Range Test
   m_EditorClassIdentifier: 
-  baseAttackRange: 1
-  attackRange: 1
-  baseAttackDamage: 10
-  attackDamage: 10
-  baseHealth: 200
-  maxHealth: 200
+  baseAttackRange: 3
+  attackRange: 3
+  baseAttackDamage: 15
+  attackDamage: 15
+  baseHealth: 100
+  maxHealth: 100
   baseMoveSpeed: 150
   moveSpeed: 150
-  baseAttackSpeed: 0.6
-  attackSpeed: 0.6
+  baseAttackSpeed: 0.75
+  attackSpeed: 0.75
   attackProjectileSprite: {fileID: 21300000, guid: 07c4ff7d71160dd41a5124c08c517f7b,
     type: 3}
-  rangeAttackTravelSpeed: 0.5
+  rangeAttackTravelSpeed: 2

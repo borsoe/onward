@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Onward.AI.Classes;
 using Onward.AI.Interfaces;
 using Onward.Character.Interfaces;
 using Onward.Character.MonoBehaviours;
 using Onward.Character.ScriptableObjects;
 using Onward.Game.MonoBehaviours;
-using Onward.Grid.Classes;
 using Onward.Grid.MonoBehaviours;
 using Onward.Miscellaneous.Enums;
+using Onward.Miscellaneous.MonoBehaviours;
 using UnityEngine;
 using Zenject;
 
@@ -24,6 +25,7 @@ namespace Onward.Character.Classes
         private GameManager _gameManager;
         private AiManager _aiManager;
         private HealthBar _healthBar;
+        private AttackProjectile.Factory _attackProjectileFactory;
 
         public delegate void HealthChangeDelegate(float value);
         public HealthChangeDelegate onHealthChange;
@@ -43,7 +45,8 @@ namespace Onward.Character.Classes
         [SerializeField] private float distanceOffset;
 
         [Inject]
-        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, HealthBar healthBar)
+        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, HealthBar healthBar,
+            AttackProjectile.Factory factory)
         {
             _graphData = graphData;
             _gameManager = gameManager;
@@ -52,6 +55,8 @@ namespace Onward.Character.Classes
             //TODO generalize
             _health = championData.baseHealth;
             onHealthChange = _healthBar.UpdateHealth;
+
+            _attackProjectileFactory = factory;
         }
 
         #endregion
@@ -115,9 +120,15 @@ namespace Onward.Character.Classes
             Health -= damage.Value;
         }
 
-        public void RangeAttack()
+        private void RangeAttack()
         {
-            throw new NotImplementedException();
+            Debug.Log($"attacking from side {this.faction}");
+            var attackProjectile = _attackProjectileFactory.Create(championData.attackProjectileSprite, new Damage
+            {
+                DamageType = DamageType.Physical,
+                Value = championData.attackDamage
+            }, championData.rangeAttackTravelSpeed, _target, this);
+            attackProjectile.transform.SetParent(null);
         }
 
         #endregion
