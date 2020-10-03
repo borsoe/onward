@@ -3,11 +3,8 @@ using Onward.AI.Classes;
 using Onward.AI.Interfaces;
 using Onward.Character.Classes;
 using Onward.Character.Interfaces;
-using Onward.Character.ScriptableObjects;
 using Onward.Game.MonoBehaviours;
 using Onward.Grid.MonoBehaviours;
-using Onward.Miscellaneous.Enums;
-using Onward.Miscellaneous.MonoBehaviours;
 using UnityEngine;
 using Zenject;
 
@@ -26,22 +23,21 @@ namespace Onward.Character.MonoBehaviours
         private GameManager _gameManager;
         private AiManager _aiManager;
         private HealthComponent _healthComponent;
-        
-        private AttackProjectile.Factory _attackProjectileFactory;
+        private AttackComponent _attackComponent;
+        private MoveComponent _moveComponent;
 
-
-        public ChampionData championData;
         [SerializeField] private float distanceOffset;
 
         [Inject]
-        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, HealthComponent healthComponent,
-            AttackProjectile.Factory factory)
+        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, 
+            HealthComponent healthComponent, AttackComponent attackComponent, MoveComponent moveComponent)
         {
             _graphData = graphData;
             _gameManager = gameManager;
             _aiManager = aiManager;
             _healthComponent = healthComponent;
-            _attackProjectileFactory = factory;
+            _attackComponent = attackComponent;
+            _moveComponent = moveComponent;
         }
 
         #endregion
@@ -62,7 +58,7 @@ namespace Onward.Character.MonoBehaviours
 
         public void Attack()
         {
-            StartCoroutine(AttackAction());
+            StartCoroutine(_attackComponent.AttackAction(_target, this));
         }
         
         public bool CheckTarget()
@@ -73,20 +69,17 @@ namespace Onward.Character.MonoBehaviours
         private bool _IsTargetAvailable()
         {
             return _target != null && _graphData.Distance(transform.position, _target.GetPosition()) <=
-                   championData.attackRange;
+                   _attackComponent.AttackRange;
         }
 
         public bool FindPathToNearestTarget()
         {
-            return _graphData.BFS(transform.position, championData.attackRange, out _target);
+            return _graphData.BFS(transform.position, _attackComponent.AttackRange, out _target);
         }
         
         public void MoveToward()
         {
-            var position = transform.position;
-            // Debug.Log($"this node pos is: {_graphData[position].Location} next node pos is: {_graphData[position].NexNode.Location}");
-            _graphData[position].OccupyingEntity = null;
-            _graphData[position].NextNode.OccupyingEntity = this;
+            _moveComponent.MoveToNextTile(_graphData[transform.position]);
         }
 
         public Vector3 GetPosition()
@@ -105,17 +98,6 @@ namespace Onward.Character.MonoBehaviours
             _healthComponent.Health -= damage.Value;
         }
 
-        private void RangeAttack()
-        {
-            Debug.Log($"attacking from side {this.faction}");
-            var attackProjectile = _attackProjectileFactory.Create(championData.attackProjectileSprite, new Damage
-            {
-                DamageType = DamageType.Physical,
-                Value = championData.attackDamage
-            }, championData.rangeAttackTravelSpeed, _target, this);
-            attackProjectile.transform.SetParent(null);
-        }
-
         #endregion
 
         #region Co-Routins
@@ -123,7 +105,7 @@ namespace Onward.Character.MonoBehaviours
         private IEnumerator Move(Vector3 to)
         {
             var delta = (to - transform.position).magnitude;
-            var timeToTravers = 100 / championData.moveSpeed;
+            var timeToTravers = 100 / _moveComponent.MoveSpeed;
             // Debug.Log($"pos is: {transform.position} and to is: {to}");
             while ((transform.position - to).magnitude >= distanceOffset)
             {
@@ -136,26 +118,6 @@ namespace Onward.Character.MonoBehaviours
                 transform.position = position;
                 yield return new WaitForEndOfFrame();
             }
-            // _aiManager.NewListener = this;
-            _aiManager.SetNewListener(this);
-            yield return new WaitForEndOfFrame();
-        }
-
-        private IEnumerator AttackAction()
-        {
-            // Debug.Log($"character {name} is attacking {((MonoBehaviour)_target).name}");
-            float waitTime = 1f / championData.attackSpeed;
-            yield return new WaitForSeconds(waitTime);
-            
-            if (championData.attackRange > 1)
-            {
-                RangeAttack();
-            }else
-                _target.TakeDamage(new Damage
-                {
-                    DamageType = DamageType.Physical,
-                    Value = championData.attackDamage
-                });
             // _aiManager.NewListener = this;
             _aiManager.SetNewListener(this);
             yield return new WaitForEndOfFrame();

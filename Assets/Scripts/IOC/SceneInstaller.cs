@@ -21,8 +21,6 @@ namespace Onward.IOC
         public Tilemap enemyTileMap; 
         public GraphData graphData;
         public UnityEngine.Grid grid;
-        public Champion champ1;
-        public Champion champ2;
         public GameObject projectilePrefab;
         public override void InstallBindings()
         {
@@ -35,11 +33,6 @@ namespace Onward.IOC
             Container.Bind<Entity>().FromComponentsInHierarchy().AsSingle();
             Container.Bind<GraphData>().FromInstance(graphData).AsSingle();
             Container.Bind<UnityEngine.Grid>().FromInstance(grid).AsSingle();
-
-
-            // Container.BindFactory<Sprite, Damage, float, IAttackAble, AttackProjectile, AttackProjectile.Factory>()
-            //     .FromMonoPoolableMemoryPool(x =>
-            //         x.WithInitialSize(20).FromSubContainerResolve().ByNewContextPrefab(projectilePrefab).UnderTransformGroup("projectiles"));
             
             Container.BindFactory<Sprite, Damage, float, IAttackAble, Entity, AttackProjectile, AttackProjectile.Factory>()
                 .FromMonoPoolableMemoryPool(x =>

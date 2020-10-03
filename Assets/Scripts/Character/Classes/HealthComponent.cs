@@ -7,12 +7,25 @@ namespace Onward.Character.Classes
     /// </summary>
     public class HealthComponent
     {
+        #region setup
+
         private float _health;
         private float _maxHealth;
         
         private delegate void HealthChangeDelegate(float value);
         private readonly HealthChangeDelegate _onHealthChange;
-
+        
+        [Inject]
+        public HealthComponent(HealthBar healthBar, [Inject(Id = "health")]float health)
+        {
+            _health = health;
+            _maxHealth = health;
+            _onHealthChange = healthBar.UpdateHealth;
+        }
+        #endregion
+        
+        #region properties
+        
         public float Health
         {
             get => _health;
@@ -29,12 +42,6 @@ namespace Onward.Character.Classes
             set => _maxHealth = value;
         }
 
-        [Inject]
-        public HealthComponent(HealthBar healthBar, [Inject]float health)
-        {
-            _health = health;
-            _maxHealth = health;
-            _onHealthChange = healthBar.UpdateHealth;
-        }
+        #endregion
     }
 }
