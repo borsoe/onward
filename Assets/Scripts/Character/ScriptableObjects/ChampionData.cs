@@ -32,5 +32,11 @@ namespace Onward.Character.ScriptableObjects
         [Header("range attack")] 
         public Sprite attackProjectileSprite;
         public float rangeAttackTravelSpeed;
+
+
+        [Header("sprite")] 
+        public Sprite characterSprite;
+        
+
     }
 }

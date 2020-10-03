@@ -12,16 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd885335cc284f4b86edc13af95bb0fa, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  baseAttackRange: 1
   attackRange: 1
-  baseAttackDamage: 10
   attackDamage: 10
-  baseHealth: 200
   maxHealth: 200
-  baseMoveSpeed: 150
   moveSpeed: 150
-  baseAttackSpeed: 0.6
   attackSpeed: 0.6
   attackProjectileSprite: {fileID: 21300000, guid: 07c4ff7d71160dd41a5124c08c517f7b,
     type: 3}
   rangeAttackTravelSpeed: 0.5
+  characterSprite: {fileID: 21300000, guid: 0dcbab247a5f584439ec4c70b46f9cd0, type: 3}

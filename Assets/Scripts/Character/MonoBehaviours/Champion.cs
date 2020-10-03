@@ -25,12 +25,13 @@ namespace Onward.Character.MonoBehaviours
         private HealthComponent _healthComponent;
         private AttackComponent _attackComponent;
         private MoveComponent _moveComponent;
+        private EntitySpriteHandler _entitySpriteHandler;
 
         [SerializeField] private float distanceOffset;
 
         [Inject]
         public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, 
-            HealthComponent healthComponent, AttackComponent attackComponent, MoveComponent moveComponent)
+            HealthComponent healthComponent, AttackComponent attackComponent, MoveComponent moveComponent, EntitySpriteHandler entitySpriteHandler)
         {
             _graphData = graphData;
             _gameManager = gameManager;
@@ -38,6 +39,7 @@ namespace Onward.Character.MonoBehaviours
             _healthComponent = healthComponent;
             _attackComponent = attackComponent;
             _moveComponent = moveComponent;
+            _entitySpriteHandler = entitySpriteHandler;
         }
 
         #endregion
@@ -94,7 +96,8 @@ namespace Onward.Character.MonoBehaviours
 
         public void TakeDamage(Damage damage)
         {
-            //TODO sadta chiz!!!
+            StartCoroutine(_entitySpriteHandler.Flicker(Color.red, 0.1f, 0.3f));
+            //TODO sadta chiz!
             _healthComponent.Health -= damage.Value;
         }
 

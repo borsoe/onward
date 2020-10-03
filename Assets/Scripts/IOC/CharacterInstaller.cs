@@ -3,6 +3,7 @@ using Onward.Character.Classes;
 using Onward.Character.MonoBehaviours;
 using Onward.Character.ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Zenject;
 
@@ -12,14 +13,15 @@ namespace Onward.IOC
     {
         public Gradient gradient;
         public Transform bar;
-        public SpriteRenderer spriteRenderer;
+        [FormerlySerializedAs("spriteRenderer")] public SpriteRenderer healthBarRenderer;
+        public SpriteRenderer entityRenderer;
         public ChampionData championData;
         public override void InstallBindings()
         {
             Container.Bind<Entity>().FromComponentOnRoot().AsSingle();
             Container.Bind<Gradient>().FromInstance(gradient).AsSingle();
             Container.Bind<Transform>().FromInstance(bar).AsSingle();
-            Container.Bind<SpriteRenderer>().FromInstance(spriteRenderer).AsSingle();
+            Container.Bind<SpriteRenderer>().FromInstance(healthBarRenderer).AsCached().WhenInjectedInto<HealthBar>();
             Container.Bind<HealthBar>().FromNew().AsSingle();
             Container.Bind<HealthComponent>().FromNew().AsSingle();
             Container.Bind<int>().FromInstance(championData.attackRange).AsSingle();
@@ -27,10 +29,16 @@ namespace Onward.IOC
             Container.Bind<float>().WithId("attackSpeed").FromInstance(championData.attackSpeed).AsCached();
             Container.Bind<float>().WithId("attackDamage").FromInstance(championData.attackDamage).AsCached();
             Container.Bind<float>().WithId("travelSpeed").FromInstance(championData.rangeAttackTravelSpeed).AsCached();
-            Container.Bind<Sprite>().FromInstance(championData.attackProjectileSprite).AsSingle();
+            Container.Bind<Sprite>().FromInstance(championData.attackProjectileSprite).AsSingle()
+                .WhenInjectedInto<AttackComponent>();
             Container.Bind<AttackComponent>().FromNew().AsSingle();
             Container.Bind<float>().WithId("moveSpeed").FromInstance(championData.moveSpeed).AsCached();
             Container.Bind<MoveComponent>().FromNew().AsSingle();
+            Container.Bind<SpriteRenderer>().FromInstance(entityRenderer).AsCached()
+                .WhenInjectedInto<EntitySpriteHandler>();
+            Container.Bind<Sprite>().FromInstance(championData.characterSprite).AsCached()
+                .WhenInjectedInto<EntitySpriteHandler>();
+            Container.Bind<EntitySpriteHandler>().FromNew().AsSingle();
         }
     }
 }

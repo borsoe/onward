@@ -108,7 +108,8 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   bar: {fileID: 7639718388612214542}
-  spriteRenderer: {fileID: 8639981067805909239}
+  healthBarRenderer: {fileID: 8639981067805909239}
+  entityRenderer: {fileID: 1728707159886561379}
   championData: {fileID: 11400000, guid: 28281f4457c43db40a5b898f6249c1d9, type: 2}
 --- !u!114 &255838748691227905
 MonoBehaviour:
@@ -123,7 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   faction: 0
-  championData: {fileID: 11400000, guid: 28281f4457c43db40a5b898f6249c1d9, type: 2}
   distanceOffset: 0.01
 --- !u!1 &1728707159886561404
 GameObject:
