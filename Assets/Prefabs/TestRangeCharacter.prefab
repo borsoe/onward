@@ -109,6 +109,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   bar: {fileID: 7639718388612214542}
   spriteRenderer: {fileID: 8639981067805909239}
+  championData: {fileID: 11400000, guid: 28281f4457c43db40a5b898f6249c1d9, type: 2}
 --- !u!114 &255838748691227905
 MonoBehaviour:
   m_ObjectHideFlags: 0

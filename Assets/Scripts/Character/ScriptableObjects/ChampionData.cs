@@ -7,11 +7,8 @@ namespace Onward.Character.ScriptableObjects
     public class ChampionData : ScriptableObject
     {
         [Header("base attributes")]
-        public int baseAttackRange;
         public int attackRange;
-        public float baseAttackDamage;
         public float attackDamage;
-        public float baseHealth;
         public float maxHealth;
         
         /// <summary>

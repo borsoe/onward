@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Onward.AI.Classes;
 using Onward.AI.Interfaces;
+using Onward.Character.Classes;
 using Onward.Character.Interfaces;
-using Onward.Character.MonoBehaviours;
 using Onward.Character.ScriptableObjects;
 using Onward.Game.MonoBehaviours;
 using Onward.Grid.MonoBehaviours;
@@ -13,8 +11,11 @@ using Onward.Miscellaneous.MonoBehaviours;
 using UnityEngine;
 using Zenject;
 
-namespace Onward.Character.Classes
+namespace Onward.Character.MonoBehaviours
 {
+    /// <summary>
+    /// The Identity class for Champions(Characters)
+    /// </summary>
     public class Champion : Entity, IAiListener, IAttackAble
     {
 
@@ -24,38 +25,22 @@ namespace Onward.Character.Classes
         private GraphData _graphData;
         private GameManager _gameManager;
         private AiManager _aiManager;
-        private HealthBar _healthBar;
+        private HealthComponent _healthComponent;
+        
         private AttackProjectile.Factory _attackProjectileFactory;
 
-        public delegate void HealthChangeDelegate(float value);
-        public HealthChangeDelegate onHealthChange;
-        private float _health;
-
-        public float Health
-        {
-            get => _health;
-            set
-            {
-                onHealthChange(_health / championData.maxHealth);
-                _health = value;
-            }
-        }
 
         public ChampionData championData;
         [SerializeField] private float distanceOffset;
 
         [Inject]
-        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, HealthBar healthBar,
+        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, HealthComponent healthComponent,
             AttackProjectile.Factory factory)
         {
             _graphData = graphData;
             _gameManager = gameManager;
             _aiManager = aiManager;
-            _healthBar = healthBar;
-            //TODO generalize
-            _health = championData.baseHealth;
-            onHealthChange = _healthBar.UpdateHealth;
-
+            _healthComponent = healthComponent;
             _attackProjectileFactory = factory;
         }
 
@@ -117,7 +102,7 @@ namespace Onward.Character.Classes
         public void TakeDamage(Damage damage)
         {
             //TODO sadta chiz!!!
-            Health -= damage.Value;
+            _healthComponent.Health -= damage.Value;
         }
 
         private void RangeAttack()
