@@ -17,7 +17,7 @@ MonoBehaviour:
   maxHealth: 100
   moveSpeed: 150
   attackSpeed: 0.75
-  faction: 0
+  faction: 1
   attackProjectileSprite: {fileID: 21300000, guid: 07c4ff7d71160dd41a5124c08c517f7b,
     type: 3}
   rangeAttackTravelSpeed: 2

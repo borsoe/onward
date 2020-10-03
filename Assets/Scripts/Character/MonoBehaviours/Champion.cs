@@ -44,6 +44,7 @@ namespace Onward.Character.MonoBehaviours
             _entitySpriteHandler = entitySpriteHandler;
             faction = championData.faction;
             _entitySpriteHandler.Init();
+            _aiManager.SetNewListener(this);
         }
         
         public class Factory: PlaceholderFactory<ChampionData, Champion>

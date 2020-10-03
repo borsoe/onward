@@ -33,7 +33,7 @@ namespace Onward.Character.Classes
             AttackRange = championData.attackRange;
             _attackSpeed = championData.attackSpeed;
             _attackDamage = championData.attackDamage;
-            _attackProjectileSprite = championData.characterSprite;
+            _attackProjectileSprite = championData.attackProjectileSprite;
             _rangeAttackTravelSpeed = championData.rangeAttackTravelSpeed;
             _attackProjectileFactory = factory;
         }

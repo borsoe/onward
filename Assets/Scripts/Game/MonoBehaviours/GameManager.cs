@@ -15,15 +15,18 @@ namespace Onward.Game.MonoBehaviours
         #region setup
 
         private EncounterDesign _encounterDesign;
+        private EncounterDesign _playerDesign;
         private Champion.Factory _unitFactory;
         private GraphData _graphData;
         
         public bool isStateCombat;
 
         [Inject]
-        public void Construct(EncounterDesign encounterDesign, GraphData graphData, Champion.Factory factory)
+        public void Construct([Inject(Id = "encounter")]EncounterDesign encounterDesign, 
+            [Inject(Id = "player")]EncounterDesign playerDesign, GraphData graphData, Champion.Factory factory)
         {
             _encounterDesign = encounterDesign;
+            _playerDesign = playerDesign;
             _graphData = graphData;
             _unitFactory = factory;
         }
@@ -43,6 +46,12 @@ namespace Onward.Game.MonoBehaviours
             {
                 var enemy = _unitFactory.Create(encounterDesignEnemy.Value);
                 _graphData[encounterDesignEnemy.Key].OccupyingEntity = enemy;
+            }
+            
+            foreach (var encounterDesignPlayer in _playerDesign.enemies)
+            {
+                var player = _unitFactory.Create(encounterDesignPlayer.Value);
+                _graphData[encounterDesignPlayer.Key].OccupyingEntity = player;
             }
         }
 

@@ -25,12 +25,13 @@ namespace Onward.IOC
         public UnityEngine.Grid grid;
         public GameObject projectilePrefab;
         public EncounterDesign encounterDesign;
+        public EncounterDesign playerDesign;
         public GameObject championPrefab;
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<AiManager>().AsSingle().NonLazy();
-            //TODO inject constructed IAiListeners
-            Container.Bind<IAiListener>().To<Champion>().FromComponentsInHierarchy().AsSingle();
+            
+            // Container.Bind<IAiListener>().To<Champion>().FromComponentsInHierarchy().AsSingle();
             
             Container.Bind<GameManager>().FromComponentInHierarchy().AsSingle();
             Container.Bind<Tilemap>().WithId("ally").FromInstance(allyTileMap).AsCached();
@@ -42,7 +43,8 @@ namespace Onward.IOC
             Container.BindFactory<Sprite, Damage, float, IAttackAble, Entity, AttackProjectile, AttackProjectile.Factory>()
                 .FromMonoPoolableMemoryPool(x =>
                     x.WithInitialSize(20).FromComponentInNewPrefab(projectilePrefab).UnderTransformGroup("projectiles"));
-            Container.Bind<EncounterDesign>().FromInstance(encounterDesign).AsSingle();
+            Container.Bind<EncounterDesign>().WithId("encounter").FromInstance(encounterDesign).AsCached();
+            Container.Bind<EncounterDesign>().WithId("player").FromInstance(playerDesign).AsCached();
             Container.BindFactory<ChampionData, Champion, Champion.Factory>().FromSubContainerResolve()
                 .ByNewContextPrefab<CharacterInstaller>(championPrefab);
         }
