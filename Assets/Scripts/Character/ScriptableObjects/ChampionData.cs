@@ -1,9 +1,10 @@
 ﻿using Onward.Character.Classes;
+using Onward.Character.MonoBehaviours;
 using UnityEngine;
 
 namespace Onward.Character.ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Character Data", menuName = "Onward/Data/CharacterData", order = 0)]
+    [CreateAssetMenu(fileName = "Character Data", menuName = "Onward/CharacterData", order = 0)]
     public class ChampionData : ScriptableObject
     {
         /// <summary>
@@ -28,7 +29,11 @@ namespace Onward.Character.ScriptableObjects
         /// </summary>
         public float attackSpeed;
 
-        
+        /// <summary>
+        /// who's side this character is?
+        /// </summary>
+        public Faction faction;
+
         [Header("range attack")] 
         public Sprite attackProjectileSprite;
         public float rangeAttackTravelSpeed;

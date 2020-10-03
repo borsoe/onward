@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1439592899680026743}
   - component: {fileID: 3209787641760320077}
   - component: {fileID: 255838748691227905}
+  - component: {fileID: 8051776093642655965}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Untagged
@@ -110,7 +111,7 @@ MonoBehaviour:
   bar: {fileID: 7639718388612214542}
   healthBarRenderer: {fileID: 8639981067805909239}
   entityRenderer: {fileID: 1728707159886561379}
-  championData: {fileID: 11400000, guid: d3c51251223bfc945b27fe36aaa1ebe0, type: 2}
+  championData: {fileID: 0}
 --- !u!114 &255838748691227905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +126,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 1
   distanceOffset: 0.01
+--- !u!114 &8051776093642655965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699210778480750140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 255838748691227905}
+  _identifier: 
+  _useSceneContext: 1
+  _context: {fileID: 0}
+  _bindType: 0
 --- !u!1 &1728707159886561404
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +215,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 0dcbab247a5f584439ec4c70b46f9cd0, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 0.8679245, g: 0.23335704, b: 0.23335704, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -204,7 +223,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1.939394}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &4332210910779291322

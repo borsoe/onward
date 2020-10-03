@@ -1,4 +1,5 @@
-﻿using Onward.Grid.Classes;
+﻿using Onward.Character.ScriptableObjects;
+using Onward.Grid.Classes;
 using Zenject;
 
 namespace Onward.Character.Classes
@@ -11,9 +12,9 @@ namespace Onward.Character.Classes
         #region setup
 
         [Inject]
-        public MoveComponent([Inject(Id = "moveSpeed")]float moveSpeed)
+        public MoveComponent(ChampionData championData)
         {
-            MoveSpeed = moveSpeed;
+            MoveSpeed = championData.moveSpeed;
         }
 
         #endregion

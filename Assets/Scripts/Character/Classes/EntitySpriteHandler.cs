@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Onward.Character.ScriptableObjects;
 using UnityEngine;
 
 namespace Onward.Character.Classes
@@ -14,9 +15,9 @@ namespace Onward.Character.Classes
         private readonly SpriteRenderer _spriteRenderer;
         private readonly Color _originalColor;
 
-        public EntitySpriteHandler(Sprite sprite, SpriteRenderer spriteRenderer)
+        public EntitySpriteHandler(ChampionData championData, SpriteRenderer spriteRenderer)
         {
-            _sprite = sprite;
+            _sprite = championData.characterSprite;
             _spriteRenderer = spriteRenderer;
             _originalColor = _spriteRenderer.color;
         }

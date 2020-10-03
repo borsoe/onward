@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd885335cc284f4b86edc13af95bb0fa, type: 3}
-  m_Name: Range Test
+  m_Name: TestAlly
   m_EditorClassIdentifier: 
-  attackRange: 3
-  attackDamage: 15
-  maxHealth: 100
+  attackRange: 1
+  attackDamage: 10
+  maxHealth: 200
   moveSpeed: 150
-  attackSpeed: 0.75
+  attackSpeed: 0.6
+  faction: 0
   attackProjectileSprite: {fileID: 21300000, guid: 07c4ff7d71160dd41a5124c08c517f7b,
     type: 3}
-  rangeAttackTravelSpeed: 2
-  characterSprite: {fileID: 21300000, guid: 240052b21634caf43a960e75674a5395, type: 3}
+  rangeAttackTravelSpeed: 0.5
+  characterSprite: {fileID: 21300000, guid: 0dcbab247a5f584439ec4c70b46f9cd0, type: 3}

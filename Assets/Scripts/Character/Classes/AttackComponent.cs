@@ -3,6 +3,7 @@ using Onward.AI.Classes;
 using Onward.AI.Interfaces;
 using Onward.Character.Interfaces;
 using Onward.Character.MonoBehaviours;
+using Onward.Character.ScriptableObjects;
 using Onward.Miscellaneous.Enums;
 using Onward.Miscellaneous.MonoBehaviours;
 using UnityEngine;
@@ -25,17 +26,15 @@ namespace Onward.Character.Classes
         private readonly float _rangeAttackTravelSpeed;
 
         [Inject]
-        public AttackComponent(AiManager aiManager, int attackRange,
-            [Inject(Id = "attackSpeed")] float attackSpeed,[Inject(Id = "attackDamage")] float attackDamage,
-            Sprite attackProjectileSprite,[Inject(Id = "travelSpeed")] float rangeAttackTravelSpeed,
+        public AttackComponent(AiManager aiManager, ChampionData championData,
             AttackProjectile.Factory factory)
         {
             _aiManager = aiManager;
-            AttackRange = attackRange;
-            _attackSpeed = attackSpeed;
-            _attackDamage = attackDamage;
-            _attackProjectileSprite = attackProjectileSprite;
-            _rangeAttackTravelSpeed = rangeAttackTravelSpeed;
+            AttackRange = championData.attackRange;
+            _attackSpeed = championData.attackSpeed;
+            _attackDamage = championData.attackDamage;
+            _attackProjectileSprite = championData.characterSprite;
+            _rangeAttackTravelSpeed = championData.rangeAttackTravelSpeed;
             _attackProjectileFactory = factory;
         }
 

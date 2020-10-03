@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using Onward.Character.ScriptableObjects;
+using Zenject;
 
 namespace Onward.Character.Classes
 {
@@ -16,10 +17,10 @@ namespace Onward.Character.Classes
         private readonly HealthChangeDelegate _onHealthChange;
         
         [Inject]
-        public HealthComponent(HealthBar healthBar, [Inject(Id = "health")]float health)
+        public HealthComponent(HealthBar healthBar, ChampionData championData)
         {
-            _health = health;
-            _maxHealth = health;
+            _health = championData.maxHealth;
+            _maxHealth = championData.maxHealth;
             _onHealthChange = healthBar.UpdateHealth;
         }
         #endregion

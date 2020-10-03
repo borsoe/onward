@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd885335cc284f4b86edc13af95bb0fa, type: 3}
+  m_Name: TestEnemy
+  m_EditorClassIdentifier: 
+  attackRange: 1
+  attackDamage: 10
+  maxHealth: 200
+  moveSpeed: 150
+  attackSpeed: 0.6
+  faction: 1
+  attackProjectileSprite: {fileID: 21300000, guid: 07c4ff7d71160dd41a5124c08c517f7b,
+    type: 3}
+  rangeAttackTravelSpeed: 0.5
+  characterSprite: {fileID: 21300000, guid: 0dcbab247a5f584439ec4c70b46f9cd0, type: 3}

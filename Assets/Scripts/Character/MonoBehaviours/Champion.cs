@@ -3,6 +3,7 @@ using Onward.AI.Classes;
 using Onward.AI.Interfaces;
 using Onward.Character.Classes;
 using Onward.Character.Interfaces;
+using Onward.Character.ScriptableObjects;
 using Onward.Game.MonoBehaviours;
 using Onward.Grid.MonoBehaviours;
 using UnityEngine;
@@ -30,8 +31,9 @@ namespace Onward.Character.MonoBehaviours
         [SerializeField] private float distanceOffset;
 
         [Inject]
-        public void Construct(GraphData graphData, GameManager gameManager, AiManager aiManager, 
-            HealthComponent healthComponent, AttackComponent attackComponent, MoveComponent moveComponent, EntitySpriteHandler entitySpriteHandler)
+        public void Construct(GraphData graphData, ChampionData championData, GameManager gameManager, AiManager aiManager, 
+            HealthComponent healthComponent, AttackComponent attackComponent, MoveComponent moveComponent, 
+            EntitySpriteHandler entitySpriteHandler)
         {
             _graphData = graphData;
             _gameManager = gameManager;
@@ -40,8 +42,14 @@ namespace Onward.Character.MonoBehaviours
             _attackComponent = attackComponent;
             _moveComponent = moveComponent;
             _entitySpriteHandler = entitySpriteHandler;
+            faction = championData.faction;
+            _entitySpriteHandler.Init();
         }
-
+        
+        public class Factory: PlaceholderFactory<ChampionData, Champion>
+        {
+        }
+        
         #endregion
 
         #region Methods
